@@ -1,91 +1,160 @@
 <template>
-<div class="">
-  <md-whiteframe md-elevation="3" class="main-toolbar">
-    <md-toolbar class="md-large">
-      <div class="md-toolbar-container">
-        <md-button class="md-icon-button" @click="$refs.sidebar.toggle()">
-          <md-icon>menu</md-icon>
-        </md-button>
-  
-        <span style="flex: 1"></span>
-  
-        <md-button class="md-icon-button">
-          <md-icon>search</md-icon>
-        </md-button>
-  
-        <md-button class="md-icon-button">
-          <md-icon>view_module</md-icon>
-        </md-button>
-      </div>
-  
-      <div class="md-toolbar-container">
-        <h2 class="md-title">My Files</h2>
-  
-        <md-button class="md-fab md-mini">
-          <md-icon>add</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-  </md-whiteframe>
-  <md-sidenav class="md-left md-fixed" ref="sidebar">
-    <md-toolbar class="md-account-header">
-      <md-list class="md-transparent">
-        <md-list-item class="md-avatar-list">
-          <md-avatar class="md-large">
-            <img src="https://placeimg.com/64/64/people/8" alt="People">
-          </md-avatar>
-  
-          <span style="flex: 1"></span>
-  
-          <md-avatar>
-            <img src="https://placeimg.com/40/40/people/3" alt="People">
-          </md-avatar>
-  
-          <md-avatar>
-            <img src="https://placeimg.com/40/40/people/4" alt="People">
-          </md-avatar>
-        </md-list-item>
-  
-        <md-list-item>
-          <div class="md-list-text-container">
-            <span>John Doe</span>
-            <span>johndoe@email.com</span>
-          </div>
-  
-          <md-button class="md-icon-button md-list-action">
-            <md-icon>arrow_drop_down</md-icon>
-          </md-button>
-        </md-list-item>
-      </md-list>
-    </md-toolbar>
-  
-    <md-list>
-      <md-list-item @click="$refs.sidebar.toggle()" class="md-primary">
-        <md-icon>insert_drive_file</md-icon> <span>My files</span>
-      </md-list-item>
-  
-      <md-list-item @click="$refs.sidebar.toggle()">
-        <md-icon>people</md-icon> <span>Shared with me</span>
-      </md-list-item>
-  
-      <md-list-item @click="$refs.sidebar.toggle()">
-        <md-icon>access_time</md-icon> <span>Recent</span>
-      </md-list-item>
-  
-      <md-list-item @click="$refs.sidebar.toggle()">
-        <md-icon>start</md-icon> <span>Starred</span>
-      </md-list-item>
-  
-      <md-list-item @click="$refs.sidebar.toggle()">
-        <md-icon>delete</md-icon> <span>Trash</span>
-      </md-list-item>
-    </md-list>
-  </md-sidenav>  
-</div>
+  <div>
+    <v-navigation-drawer
+      fixed
+      clipped
+      app
+      v-model="drawer"
+    >
+      <v-list dense>
+        <template v-for="(item, i) in items">
+          <v-layout
+            row
+            v-if="item.heading"
+            align-center
+            :key="i"
+          >
+            <v-flex xs6>
+              <v-subheader v-if="item.heading">
+                {{ item.heading }}
+              </v-subheader>
+            </v-flex>
+            <v-flex xs6 class="text-xs-center">
+              <a href="#!" class="body-2 black--text">EDIT</a>
+            </v-flex>
+          </v-layout>
+          <v-list-group v-else-if="item.children" v-model="item.model" no-action>
+            <v-list-tile slot="item" @click="">
+              <v-list-tile-action>
+                <v-icon>{{ item.model ? item.icon : item['icon-alt'] }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  {{ item.title }}
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile
+              v-for="(child, i) in item.children"
+              :key="i"
+              @click=""
+            >
+              <v-list-tile-action v-if="child.icon">
+                <v-icon>{{ child.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  {{ child.title }}
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+          <v-list-tile v-else @click="routerPush(item)">
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                {{ item.title }}
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar
+      color="blue darken-3"
+      dark
+      app
+      clipped-left
+      fixed
+    >
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        Google Contacts
+      </v-toolbar-title>
+      <v-text-field
+        solo
+        prepend-icon="search"
+        placeholder="Search"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>apps</v-icon>
+      </v-btn>
+      <v-menu 
+        offset-x
+        :close-on-content-click="false"
+        :nudge-width="200"
+        v-model="menu"
+      >
+        <v-btn icon slot="activator">
+          <v-icon>notifications</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="/static/doc-images/john.jpg" alt="John">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>John Leider</v-list-tile-title>
+              <v-list-tile-sub-title>Founder of Vuetify.js</v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn
+                icon
+                :class="fav ? 'red--text' : ''"
+                @click="fav = !fav"
+              >
+                <v-icon>favorite</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>        
+      </v-menu>
+      <v-menu bottom left>
+        <v-btn icon slot="activator">
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-tile v-for="item in authItems" :key="item.title" @click="routerPush(item)" v-show="item.show">
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>     
+    </v-toolbar>
+  </div>
 </template>
 
 <script>
-export default {
-  mame: 'MainContainer'
-}
+  export default {
+    data: () => ({
+      drawer: true,
+      fav: true,
+      menu: false,
+      items: [
+        { icon: 'contacts', title: 'Home', to: '/' },
+        { icon: 'history', title: 'Users', to: '/users' },
+        { icon: 'content_copy', title: 'Login', to: '/login' }
+      ],
+      authItems: [
+        { icon: 'contacts', title: 'Show', to: '/', show: this.show },
+        { icon: 'contacts', title: 'Hide', to: '/', show: !this.show },
+        { icon: 'contacts', title: 'Show', to: '/', show: this.show }
+      ]
+    }),
+    props: {
+      source: String
+    },
+    methods: {
+      routerPush: function (item) {
+        this.$router.push(item.to)
+      }
+    },
+    computed: {
+      show: function () {
+        return this.$store.state.auth.loggedIn
+      }
+    }
+  }
 </script>

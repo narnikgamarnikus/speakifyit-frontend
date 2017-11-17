@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    <div class="app-viewport" id="file-list">
+    <v-app id="inspire">
       <main-container/>
-      <main class="main-content">
-       
-      </main>
-    </div>  
-    <!--img src="./assets/logo.png">
-    <router-link to="/">Home</router-link>
-    <router-link to="/test">Test</router-link>
-    <router-view/-->
+      <main-content>
+        <router-view/>
+      </main-content>
+    </v-app>
   </div>
 </template>
 
@@ -26,6 +22,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%
+  height: 100%;
 }
+
+/*
+@media screen and (min-width: 900px) {
+  .main-content{
+    margin-left: 304px;
+  }
+}
+*/
 </style>
