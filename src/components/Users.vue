@@ -1,112 +1,128 @@
 <template>
-<div class="">
-  <md-list class="md-dense">
-    <md-list-item class="md-list-item md-button user" @click="openDialog('UserDialog', 'user')">
-      <md-avatar>
-        <img src="https://placeimg.com/128/128/people/1" alt="People">
-      </md-avatar>
+<div>
+  <v-layout row>
+    <v-flex xs12 sm12 md12 offset-md-1 lg10 offset-lg1 lx10 offset-lx1 >
+      <v-card class="grid">
+        <v-toolbar color="white" flat>
+          <v-btn icon light>
+            <v-icon color="grey darken-2">arrow_back</v-icon>
+          </v-btn>
+          <v-toolbar-title class="grey--text text--darken-4">Albums</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon light>
+            <v-icon color="grey darken-2">search</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-subheader>May</v-subheader>
+        <v-container fluid grid-list-lg>
+          <v-layout row wrap>
+            <v-flex xs12 sm12 md6 lg6 lx6 v-for="i in 64" :key="i">
+              <v-card style="padding: 1rem" @click.native="dialog = true" ripple class="card--custom">
+              <div class="card--custom--body">
+                <img class="card--custom--avatar image" v-bind:src="`https://randomuser.me/api/portraits/men/${i + 20}.jpg`" alt="lorem" width="100%" height="100%">
+                <div class="card--custom--body--left">
+                  <div class="card--custom--body--left--text">
+                    <p class="card--custom--body--left--text--title"><strong>John Lenon</strong></p>
+                    <p class="card--custom--body--left--text--description">loren ipsmut loren ipsmut loren ipsmut loren ipsmut</p>
+                  </div>
+                  <div class="card--custom--body--left--flag">
+                    <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
+                    <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
+                  </div>                  
+                </div>
+              </div>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <v-footer class="mt-5"></v-footer>
+      </v-card>
+    </v-flex>
+  </v-layout>
 
-      <span class="md-title">Abbey Christansen</span>
-
-      <md-button class="md-icon-button md-list-action">
-        <md-icon class="md-primary">chat_bubble</md-icon>
-      </md-button>
-    </md-list-item>
-
-    <md-list-item class="md-list-item md-button user" @click="openDialog('UserDialog', 'user')">
-      <md-avatar>
-        <img src="https://placeimg.com/128/128/people/2" alt="People">
-      </md-avatar>
-
-      <span class="md-title">Alex Nelson</span>
-
-      <md-button class="md-icon-button md-list-action">
-        <md-icon class="md-primary">chat_bubble</md-icon>
-      </md-button>
-    </md-list-item>
-
-    <md-list-item class="md-list-item md-button user" @click="openDialog('UserDialog', 'user')">
-      <md-avatar>
-        <img src="https://placeimg.com/128/128/people/3" alt="People">
-      </md-avatar>
-
-      <span class="md-title">Mary Johnson</span>
-
-      <md-button class="md-icon-button md-list-action">
-        <md-icon>chat_bubble</md-icon>
-      </md-button>
-    </md-list-item>
-  </md-list>
-
-  <md-dialog md-open-from="#custom" md-close-to="#custom" ref="UserDialog">
-    <md-card>
-      <md-card-header>
-        <md-card-header-text>
-          <div class="md-title">Title goes here</div>
-          <div class="md-subhead">Subtitle here</div>
-        </md-card-header-text>
-
-        <md-card-media>
-          <img src="https://placeimg.com/128/128/people/1" alt="People">
-        </md-card-media>
-      </md-card-header>
-
-      <md-card-actions>
-        <md-button @click="closeDialog('UserDialog')">Action</md-button>
-        <md-button @click="closeDialog('UserDialog')">Action</md-button>
-      </md-card-actions>
-    </md-card>
-  </md-dialog>
-
+  <v-layout row justify-center>
+    <v-dialog v-model="dialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline">Use Google's location service?</v-card-title>
+        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-layout>
 </div>
 </template>
 <script>
-// import { EventBus } from '../event-bus.js'
-// import {store} from '../store'
 export default {
   name: 'Users',
-  methods: {
-    // choiceUser (user) {
-    //  EventBus.$emit('user-choised', this, user)
-    // }
-    openDialog (ref, user) {
-      console.log(user)
-      this.$refs[ref].open()
-    },
-    closeDialog (ref, user) {
-      console.log(user)
-      this.$refs[ref].close()
+  data () {
+    return {
+      dialog: false
     }
   }
 }
 </script>
-<style>
-.md-list.md-dense .md-avatar {
-    width: 128px;
-    min-width: 128px;
-    height: 128px;
-    min-height: 128px;
+<style scoped>
+.card--custom {
+  transition: all .2s ease-in-out;
 }
-.md-avatar {
-	width: 40px;
-	min-width: 40px;
-	height: 40px;
-	min-height: 40px;
-	margin: auto;
-	display: inline-block;
-	overflow: hidden;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	position: relative;
-	border-radius: 66px;
-	vertical-align: middle;	
+.card--custom:hover {
+  transform: scale(1.05);
 }
-/*
-.user {
-	margin: 0.25rem 2rem;
-	box-shadow: 0 1px 5px rgba(0,0,0,.2),0 2px 2px rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.12);
+.card--custom--body {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  cursor: pointer;
 }
-*/
+.card--custom--avatar {
+  border-radius: 99rem;
+  width: 10rem;
+  height: 10rem;
+}
+.card--custom--body--left {
+  margin-left: 1rem; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: 
+  space-between; 
+  height: 100%;
+}
+.card--custom--body--left--text {
+  display: flex; 
+  flex-direction: column; 
+  text-align: left
+}
+.card--custom--body--left--flag {
+  display: flex; 
+  justify-content: space-between; 
+  margin-top: 2rem; 
+  margin-right: 0.5rem
+}
+.card--custom--body--left--text--title {
+  font-size: 1.5rem;
+}
+.card--custom--body--left--text--description {
+  font-size: 1.25rem;
+}
+
+.flag {
+  width: 4rem; 
+  height: 3rem;
+}
+
+@media screen and (max-width: 500px) {
+  .card--custom--body {
+    flex-direction: column; 
+  }
+  .card--custom--body--left--text { 
+    text-align: center
+  }
+  .card--custom--body--left--flag {
+    justify-content: space-around; 
+  }
+}
 </style>

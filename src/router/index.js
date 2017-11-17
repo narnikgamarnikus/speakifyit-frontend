@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Users from '@/components/Users.vue'
-import Profile from '@/components/Profile.vue'
+import Home from '@/components/Home.vue'
 import Login from '@/components/Login.vue'
+import Chat from '@/components/Chat.vue'
 import NotFoundComponent from '@/components/NotFoundComponent.vue'
 import {store} from '@/store'
 Vue.use(Router)
@@ -13,7 +14,7 @@ export const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Profile
+      component: Home
     },
     {
       path: '/login',
@@ -24,7 +25,13 @@ export const router = new Router({
       path: '/users',
       name: 'users',
       component: Users,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: Chat,
+      meta: { requiresAuth: false }
     },
     {
       path: '*',

@@ -4,7 +4,10 @@
       fixed
       clipped
       app
+      floating
       v-model="drawer"
+      color="light-blue"
+      touchless="false"
     >
       <v-list dense>
         <template v-for="(item, i) in items">
@@ -63,7 +66,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
-      color="blue darken-3"
+      color="light-blue"
       dark
       app
       clipped-left
@@ -71,13 +74,8 @@
     >
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        Google Contacts
+        Speakify.it
       </v-toolbar-title>
-      <v-text-field
-        solo
-        prepend-icon="search"
-        placeholder="Search"
-      ></v-text-field>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>apps</v-icon>
@@ -135,7 +133,8 @@
       items: [
         { icon: 'contacts', title: 'Home', to: '/' },
         { icon: 'history', title: 'Users', to: '/users' },
-        { icon: 'content_copy', title: 'Login', to: '/login' }
+        { icon: 'content_copy', title: 'Login', to: '/login' },
+        { icon: 'content_copy', title: 'Chat', to: '/chat' }
       ],
       authItems: [
         { icon: 'contacts', title: 'Show', to: '/', show: this.show },

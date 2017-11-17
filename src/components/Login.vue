@@ -83,3 +83,9 @@
     }
   }
 </script>
+<style>
+  .primary--text,
+  .accent--text{
+    color: #03a9f4 !important;
+  }
+</style>
