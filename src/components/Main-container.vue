@@ -7,7 +7,6 @@
       floating
       v-model="drawer"
       color="light-blue"
-      touchless="false"
     >
       <v-list dense>
         <template v-for="(item, i) in items">

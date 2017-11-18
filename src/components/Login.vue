@@ -6,12 +6,14 @@
       v-model="name"
       :rules="nameRules"
       :counter="10"
+      color="light-blue"
       required
     ></v-text-field>
     <v-text-field
       label="E-mail"
       v-model="email"
       :rules="emailRules"
+      color="light-blue"
       required
     ></v-text-field>
     <v-select
@@ -19,12 +21,14 @@
       v-model="select"
       :items="items"
       :rules="[v => !!v || 'Item is required']"
+      color="light-blue"
       required
     ></v-select>
     <v-checkbox
       label="Do you agree?"
       v-model="checkbox"
       :rules="[v => !!v || 'You must agree to continue!']"
+      color="light-blue"
       required
     ></v-checkbox>
 
@@ -83,9 +87,3 @@
     }
   }
 </script>
-<style>
-  .primary--text,
-  .accent--text{
-    color: #03a9f4 !important;
-  }
-</style>
