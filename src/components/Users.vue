@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-layout row>
-    <v-flex xs12 sm12 md12 offset-md-1 lg10 offset-lg1 lx10 offset-lx1 >
+    <v-flex xs12 sm12 md12 lg10 offset-lg1 lx10 offset-lx1 >
       <v-card class="grid">
         <v-toolbar color="white" flat>
           <v-btn icon light>
@@ -98,7 +98,7 @@ export default {
 }
 .card--custom--body--left--flag {
   display: flex; 
-  justify-content: space-between; 
+  /* justify-content: space-between; */ 
   margin-top: 2rem; 
   margin-right: 0.5rem
 }
@@ -112,6 +112,7 @@ export default {
 .flag {
   width: 4rem; 
   height: 3rem;
+  margin: 0 1.5rem 0 1.5rem;
 }
 
 @media screen and (max-width: 500px) {

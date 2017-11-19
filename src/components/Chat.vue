@@ -1,6 +1,6 @@
 <template>
   <v-layout row>
-    <v-flex lg10 offset-lg1>
+    <v-flex xs12 sm12 md12 lg10 offset-lg1 lx10 offset-lx1>
       <v-card class="chat--card">
         <!--v-toolbar color="teal" dark>
           <v-toolbar-side-icon></v-toolbar-side-icon>
@@ -10,17 +10,21 @@
             <v-icon>search</v-icon>
           </v-btn>
         </v-toolbar-->
-        <div class="flex lg3">
+        <div class="flex xs2 sm3 md3 lg3">
           <v-list subheader>
-            <v-subheader>Recent chat</v-subheader>
-              <v-list-tile avatar v-for="item in items1" v-bind:key="item.title" @click="" style="word-break:break-all; width: 100%">
+            <v-subheader class="small--hide">Recent chat</v-subheader>
+              <v-list-tile avatar v-for="item in items1" v-bind:key="item.title" @click="checkUser(item)" style="word-break:break-all; width: 100%">
                 <v-list-tile-avatar>
-                  <img v-bind:src="item.avatar"/>
+                  <img v-bind:src="item.avatar" class="small--hide">
+                  <v-badge overlap color="indigo" v-model="item.active" class="small--show">
+                    <span slot="badge">{{ item.count }}</span>
+                    <img v-bind:src="item.avatar"/>
+                  </v-badge>
                 </v-list-tile-avatar>
-                <v-list-tile-content>
+                <v-list-tile-content class="small--hide">
                   <v-list-tile-title v-html="item.title"></v-list-tile-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
+                <v-list-tile-action class="small--hide">
                   <v-badge overlap color="indigo" v-model="item.active">
                     <span slot="badge">{{ item.count }}</span>
                     <v-icon v-bind:color="item.active ? 'teal' : 'grey'">chat_bubble</v-icon>
@@ -30,25 +34,25 @@
           </v-list>
           <v-divider></v-divider>
           <v-list subheader>
-            <v-subheader>Previous chats</v-subheader>
-            <v-list-tile avatar v-for="item in items2" v-bind:key="item.title" @click="">
+            <v-subheader class="small--hide">Previous chats</v-subheader>
+            <v-list-tile avatar v-for="item in items2" v-bind:key="item.title" @click="checkUser(item)">
               <v-list-tile-avatar>
                 <img v-bind:src="item.avatar"/>
               </v-list-tile-avatar>
-              <v-list-tile-content>
+              <v-list-tile-content class="small--hide">
                 <v-list-tile-title v-html="item.title"></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
         </div>
 
-        <div class="flex lg9 chat--container">
+        <div class="flex xs10 sm9 md9 lg9 chat--container">
           <div>
             <v-list subheader >
               <v-subheader>Recent chat</v-subheader>
-                <v-list-tile avatar class="chat--container--message" v-for="item in messages" v-bind:key="item.title" @click="">
+                <v-list-tile avatar class="chat--container--message" v-for="item in userMessages" v-bind:key="item.title" @click="">
                   <v-list-tile-avatar>
-                    <img v-bind:src="item.user"/>
+                    <img v-bind:src="userAvatar"/>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
                     <v-list-tile-title v-html="item.text" class="break--text"></v-list-tile-title>
@@ -96,25 +100,28 @@
   export default {
     data () {
       return {
+        windowWidth: 0,
+        showOnMobile: false,
+        currentUser: { id: 1, show: false, active: true, title: 'Jason Oner', avatar: 'https://randomuser.me/api/portraits/men/1.jpg', count: 1 },
         selected: [2],
-        oldmessage: '',
-        founder: '',
+        user: { id: 25, show: false, active: true, title: 'Narnik Gamarnik', avatar: 'https://randomuser.me/api/portraits/men/25.jpg', count: 1 },
         message: {
           id: '',
-          user: 'https://randomuser.me/api/portraits/men/3.jpg',
+          toUser: '',
+          fromUser: '',
           text: '',
           is_modified: false,
           user_modifier: ''
         },
         messages: [],
         items1: [
-          { active: true, title: 'Jason Oner', avatar: 'https://randomuser.me/api/portraits/men/1.jpg', count: 1 },
-          { active: true, title: 'Ranee Carlson', avatar: 'https://randomuser.me/api/portraits/men/2.jpg', count: 13 },
-          { active: false, title: 'Cindy Baker', avatar: 'https://randomuser.me/api/portraits/men/3.jpg', count: 0 },
-          { active: false, title: 'Ali Connors', avatar: 'https://randomuser.me/api/portraits/men/4.jpg', count: 0 }
+          { id: 1, show: false, active: true, title: 'Jason Oner', avatar: 'https://randomuser.me/api/portraits/men/1.jpg', count: 1 },
+          { id: 2, show: false, active: true, title: 'Ranee Carlson', avatar: 'https://randomuser.me/api/portraits/men/2.jpg', count: 13 },
+          { id: 3, show: false, active: false, title: 'Cindy Baker', avatar: 'https://randomuser.me/api/portraits/men/3.jpg', count: 0 },
+          { id: 4, show: false, active: false, title: 'Ali Connors', avatar: 'https://randomuser.me/api/portraits/men/4.jpg', count: 0 }
         ],
         items2: [
-          { title: 'Travis Howard', avatar: 'https://randomuser.me/api/portraits/men/5.jpg' }
+          { id: 5, show: false, active: false, title: 'Travis Howard', avatar: 'https://randomuser.me/api/portraits/men/5.jpg', count: 55 }
         ],
         items3: [
           { action: '15 min', headline: 'Brunch this weekend?', title: 'Ali Connors', subtitle: 'I\'ll be in your neighborhood doing errands this weekend. Do you want to hang out?', avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
@@ -126,7 +133,6 @@
         methods: {
           toggle (index) {
             const i = this.selected.indexOf(index)
-
             if (i > -1) {
               this.selected.splice(i, 1)
             } else {
@@ -136,29 +142,63 @@
         }
       }
     },
+    computed: {
+      userAvatar: function () {
+        var fromUser = this.items1.find(fromUser => fromUser.id === this.currentUser.id)
+        return fromUser.avatar
+      },
+      userMessages: function () {
+        return this.messages.filter(message => message.toUser.id === this.currentUser.id)
+      }
+    },
     methods: {
       messageEdit: function (item) {
-        console.log(JSON.stringify(item))
+        console.log(item.id)
+        // console.log(JSON.stringify(item))
         this.message.text = (item.text).trim()
         this.message.id = item.id
       },
       sendMessage: function () {
         if ((this.message.text).trim().length > 0) {
           if (this.message.id !== '') {
-            this.founder = this.message.id
-            var item = this.messages.find(this.findMessage)
-            item.text = this.message.text
-            this.founder = ''
+            var founder = this.message.id
+            var message = this.messages.find(message => message.id === founder)
+            message.text = this.message.text
           } else {
+            this.message.toUser = this.currentUser
+            this.message.fromUser = this.user
             this.message.id = Math.random()
+            console.log(JSON.stringify(this.message))
             this.messages.push(this.message)
           }
-          this.message = { id: '', user: 'https://randomuser.me/api/portraits/men/3.jpg', text: '', is_modified: false, user_modifier: '' }
+          this.message = { id: '', toUser: '', fromUser: this.user, text: '', is_modified: false, user_modifier: '' }
         }
       },
-      findMessage: function (id) {
-        return this.message.id === this.founder
+      getWindowWidth: function (event) {
+        this.windowWidth = document.documentElement.clientWidth
+        // console.log(this.windowWidth)
+        if (this.windowWidth > 900) {
+          this.showOnMobile = false
+          console.log(this.showOnMobile)
+        } else {
+          this.showOnMobile = true
+          console.log(this.showOnMobile)
+        }
+      },
+      checkUser: function (user) {
+        this.currentUser = user
+        return user.id
       }
+    },
+    mounted () {
+      this.$nextTick(function () {
+        window.addEventListener('resize', this.getWindowWidth)
+        // Init
+        this.getWindowWidth()
+      })
+    },
+    beforeDestroy () {
+      window.removeEventListener('resize', this.getWindowWidth)
     }
   }
 </script>
@@ -216,4 +256,23 @@
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
   }
+  .small--show {
+    display: none;
+  }
+
+@media screen and (max-width: 900px) {  
+  .small--hide {
+    display: none;
+  }
+  .small--show {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 400px) {  
+  .very--small--hide {
+    display: none;
+  }
+}
+
 </style>
