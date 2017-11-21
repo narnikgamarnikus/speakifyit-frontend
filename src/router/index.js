@@ -19,19 +19,28 @@ export const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      beforeEnter: (to, from, next) => {
+        if (store.state.auth.loggedIn) {
+          next({
+            path: from.fullPath
+          })
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/users',
       name: 'users',
       component: Users,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/chat',
       name: 'chat',
       component: Chat,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '*',

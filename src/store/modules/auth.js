@@ -4,7 +4,8 @@ const state = {
   loggedIn: false,
   profile: {},
   validation: {email: true},
-  authError: false
+  authError: false,
+  token: null
 }
 
 const getters = {}
@@ -24,20 +25,31 @@ const mutations = {
   },
   setAuthError (state, bool) {
     state.authError = bool
+  },
+  setToken (state, token) {
+    state.token = token
   }
 }
 
 const actions = {
   postLogin (context, payload) {
-    return axios.post('/api/users/login/', payload)
-        .then(response => {})
+    return axios.post('http://127.0.0.1:8000/api/users/login/', payload)
+        .then(response => {
+          if (response.status === 200) {
+            context.commit('setToken', response.data)
+            context.commit('login')
+          }
+        })
         .catch(e => {
           context.commit('setAuthError', true)
           console.log(e)
+          setTimeout(function () {
+            context.commit('setAuthError', false)
+          }, 2000)
         })
   },
   postRegister (context, payload) {
-    return axios.post('/api/users/register/', payload)
+    return axios.post('http://127.0.0.1:8000/api/users/register/', payload)
         .then(response => {
           if (response.data.status === 210) {
             context.commit('setValidationEmail', false)
@@ -50,10 +62,11 @@ const actions = {
         .catch(e => { console.log(e) })
   },
   getProfile (context) {
-    return axios.get('/api/users/profile')
+    return axios.get('http://127.0.0.1:8000/api/users/profile/?token=' + this.state.auth.token)
         .then(response => {
           context.commit('login')
           context.commit('setProfile', response.data)
+          console.log(response.data)
         })
         .catch(e => {
           context.commit('logout')

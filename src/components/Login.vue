@@ -1,44 +1,36 @@
 <template>
-<div style="display: flex; justify-content: center;">
-  <v-form v-model="valid" ref="form" lazy-validation style="width: 30rem">
+<div>
+  <v-alert
+    color="error"
+    icon="error"
+    :value="authError"
+    transition="scale-transition"
+  >
+    Please, try again
+  </v-alert>
+  <v-form v-model="valid" ref="form" lazy-validation @keyup:enter="submit" style="width: 30rem; margin-top: 5rem">
     <v-text-field
-      label="Name"
-      v-model="name"
-      :rules="nameRules"
-      :counter="10"
+      label="Username"
+      v-model="username"
+      :rules="usernameRules"
+      :counter="30"
       color="light-blue"
       required
     ></v-text-field>
     <v-text-field
-      label="E-mail"
-      v-model="email"
-      :rules="emailRules"
+      label="Password"
+      v-model="password"
+      :rules="passwordRules"
+      type="password"
       color="light-blue"
       required
     ></v-text-field>
-    <v-select
-      label="Item"
-      v-model="select"
-      :items="items"
-      :rules="[v => !!v || 'Item is required']"
-      color="light-blue"
-      required
-    ></v-select>
-    <v-checkbox
-      label="Do you agree?"
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      color="light-blue"
-      required
-    ></v-checkbox>
-
     <v-btn
       @click="submit"
       :disabled="!valid"
     >
       submit
     </v-btn>
-    <v-btn @click="clear">clear</v-btn>
   </v-form>
 </div>  
 </template>
@@ -46,17 +38,19 @@
   export default {
     name: 'Login',
     data: () => ({
-      valid: true,
-      name: '',
-      nameRules: [
-        (v) => !!v || 'Name is required',
-        (v) => (v && v.length) <= 10 || 'Name must be less than 10 characters'
+      valid: false,
+      username: '',
+      usernameRules: [
+        (v) => !!v || 'Username is required',
+        (v) => (v && v.length) >= 3 || 'Username must be more than 3 characters'
       ],
-      email: '',
-      emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid' // eslint-disable-line
-      ],
+      password: '',
+      passwordRules: [
+        (v) => !!v || 'Password is required',
+        (v) => (v && v.length) >= 3 || 'Password must be more than 3 characters'
+        // (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid' // eslint-disable-line
+      ]
+      /*
       select: null,
       items: [
         'Item 1',
@@ -65,20 +59,37 @@
         'Item 4'
       ],
       checkbox: false
+      */
     }),
+    watch: {
+      loggedIn: function () {
+        if (this.loggedIn === true) {
+          this.$router.push('/users')
+          this.$store.dispatch('getProfile')
+          this.$store.dispatch('getUsersList')
+        }
+      },
+      authError: function () {
+        if (this.authError === true) {
+          this.$refs.form.reset()
+        }
+      }
+    },
+    computed: {
+      loggedIn: function () {
+        return this.$store.state.auth.loggedIn
+      },
+      authError: function () {
+        return this.$store.state.auth.authError
+      }
+    },
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          /*
-          axios.post('/api/submit', {
-            name: this.name,
-            email: this.email,
-            select: this.select,
-            checkbox: this.checkbox
+          this.$store.dispatch('postLogin', {
+            email: this.username,
+            password: this.password
           })
-          */
-          console.log('submit')
         }
       },
       clear () {

@@ -51,7 +51,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          <v-list-tile v-else @click="routerPush(item)">
+          <v-list-tile v-else @click="routerPush(item)" v-show="item.show">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -130,15 +130,14 @@
       fav: true,
       menu: false,
       items: [
-        { icon: 'contacts', title: 'Home', to: '/' },
-        { icon: 'history', title: 'Users', to: '/users' },
-        { icon: 'content_copy', title: 'Login', to: '/login' },
-        { icon: 'content_copy', title: 'Chat', to: '/chat' }
+        { icon: 'contacts', title: 'Home', to: '/', show: true },
+        { icon: 'history', title: 'Users', to: '/users', show: true },
+        { icon: 'content_copy', title: 'Chat', to: '/chat', show: true }
       ],
       authItems: [
         { icon: 'contacts', title: 'Show', to: '/', show: this.show },
-        { icon: 'contacts', title: 'Hide', to: '/', show: !this.show },
-        { icon: 'contacts', title: 'Show', to: '/', show: this.show }
+        { icon: 'contacts', title: 'Login', to: '/login', show: !this.show },
+        { icon: 'contacts', title: 'Logout', to: '/logout', show: this.show }
       ]
     }),
     props: {
