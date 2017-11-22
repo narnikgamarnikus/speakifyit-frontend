@@ -2,6 +2,8 @@ import axios from 'axios'
 
 const state = {
   users: [],
+  usersNext: null,
+  usersPrevious: null,
   emailFail: false,
   tokenFail: false
 }
@@ -10,7 +12,13 @@ const getters = {}
 
 const mutations = {
   setUsers (state, users) {
-    state.users = users
+    state.users.push(...users)
+  },
+  setUsersNext (state, link) {
+    state.usersNext = link
+  },
+  setUsersPrevious (state, link) {
+    state.usersPrevious = link
   },
   setUser (state, user) {
     state.user = user
@@ -25,10 +33,15 @@ const mutations = {
 
 const actions = {
   getUsersList (context) {
-    return axios.get('http://127.0.0.1:8000/api/users/?token=' + this.state.auth.token)
+    var url = 'http://127.0.0.1:8000/api/users/?token=' + this.state.auth.token
+    if (this.state.users.usersNext !== null) {
+      url = this.state.users.usersNext
+    }
+    return axios.get(url)
         .then(response => {
+          context.commit('setUsersNext', response.data.next)
           context.commit('setUsers', response.data.results)
-          console.log(response.data.results)
+          context.commit('setUsersPrevious', response.data.previous)
         })
         .catch(e => { console.log(e) })
   },

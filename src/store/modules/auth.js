@@ -66,7 +66,6 @@ const actions = {
         .then(response => {
           context.commit('login')
           context.commit('setProfile', response.data)
-          console.log(response.data)
         })
         .catch(e => {
           context.commit('logout')

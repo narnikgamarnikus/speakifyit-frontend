@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="2500">
   <v-layout row>
     <v-flex xs12 sm12 md12 lg10 offset-lg1 lx10 offset-lx1 >
       <v-card class="grid">
@@ -16,14 +16,14 @@
         <v-subheader>May</v-subheader>
         <v-container fluid grid-list-lg>
           <v-layout row wrap>
-            <v-flex xs12 sm12 md6 lg6 lx6 v-for="(user, i) in users" :key="i">
+            <v-flex xs12 sm12 md6 lg6 lx6 v-for="(user, i) in $store.state.users.users" :key="i">
               <v-card style="padding: 1rem" @click.native="dialog = true" ripple class="card--custom">
               <div class="card--custom--body">
                 <img class="card--custom--avatar image" v-bind:src="user.avatar" alt="user.full_name" width="100%" height="100%">
                 <div class="card--custom--body--left">
                   <div class="card--custom--body--left--text">
                     <p class="card--custom--body--left--text--title"><strong>{{ user.username }}</strong></p>
-                    <p class="card--custom--body--left--text--description">{{ user.fullname }}</p>
+                    <p class="card--custom--body--left--text--description">{{ user.about }}</p>
                   </div>
                   <div class="card--custom--body--left--flag">
                     <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
@@ -60,13 +60,17 @@ export default {
   name: 'Users',
   data () {
     return {
-      dialog: false
+      dialog: false,
+      loading: false
     }
   },
-  computed: {
-    users: function () {
-      console.log(this.$store.state.users.users)
-      return this.$store.state.users.users
+  methods: {
+    loadMore: function () {
+      this.loading = true
+      setTimeout(() => {
+        this.$store.dispatch('getUsersList')
+        this.loading = false
+      }, 1000)
     }
   }
 }

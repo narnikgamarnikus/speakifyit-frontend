@@ -11,6 +11,9 @@ import 'vuetify/dist/vuetify.css'
 import MainContainer from './components/Main-container.vue'
 import Content from './components/Content.vue'
 
+import infiniteScroll from 'vue-infinite-scroll'
+
+Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
   theme: {
     primary: '#3f51b5',
