@@ -18,7 +18,7 @@
           <v-layout row wrap>
             <v-flex xs12 sm12 md6 lg6 lx6 v-for="(user, i) in $store.state.users.users" :key="i">
               <v-card style="padding: 1rem" @click.native="dialog = true" ripple class="card--custom">
-              <div class="card--custom--body">
+              <div class="card--custom--body"  @click="checkUser(user)">
                 <img class="card--custom--avatar image" v-bind:src="user.avatar" alt="user.full_name" width="100%" height="100%">
                 <div class="card--custom--body--left">
                   <div class="card--custom--body--left--text">
@@ -43,8 +43,8 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
-        <v-card-title class="headline">Use Google's location service?</v-card-title>
-        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+        <v-card-title class="headline">{{ user.username }}</v-card-title>
+        <v-card-text>{{ user.about }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
@@ -61,7 +61,8 @@ export default {
   data () {
     return {
       dialog: false,
-      loading: false
+      loading: false,
+      user: {}
     }
   },
   methods: {
@@ -71,6 +72,9 @@ export default {
         this.$store.dispatch('getUsersList')
         this.loading = false
       }, 1000)
+    },
+    checkUser: function (user) {
+      this.user = user
     }
   }
 }
