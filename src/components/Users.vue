@@ -23,7 +23,7 @@
                 <div class="card--custom--body--left">
                   <div class="card--custom--body--left--text">
                     <p class="card--custom--body--left--text--title"><strong>{{ user.username }}</strong></p>
-                    <p class="card--custom--body--left--text--description">{{ user.about }}</p>
+                    <p class="card--custom--body--left--text--description">{{ user.about | truncate(60) }}</p>
                   </div>
                   <div class="card--custom--body--left--flag" v-for="language in user.learn">
                     <div style="display: flex; flex-direction: column;align-items: center;">
@@ -36,10 +36,8 @@
                       >
                       {{ language.skill * 10 }}
                       </v-progress-circular>
-                      <!--img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
-                      <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag"-->
-                    </div> 
-                  </div>                 
+                    </div>
+                  </div>
                 </div>
               </div>
               </v-card>
@@ -52,15 +50,27 @@
   </v-layout>
 
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="290pxYe ">
+    <v-dialog v-model="dialog" max-width="290px">
       <v-card class="card--dialog">
         <img class="card--custom--avatar mt1 image" v-bind:src="user.avatar" alt="user.full_name" width="100%" height="100%">
+        <div class="card--custom--body--left--flag" v-for="language in user.learn">
+          <div style="display: flex; flex-direction: column;align-items: center;">
+            <flag :iso="language.language" class="flag" />
+            <v-progress-circular
+            v-bind:size="45"
+            v-bind:width="5"
+            v-bind:value="language.skill * 10"
+            color="teal"
+            >
+            {{ language.skill * 10 }}
+            </v-progress-circular>
+          </div>
+        </div>
         <v-card-title class="headline ">{{ user.username }}</v-card-title>
         <v-card-text>{{ user.about }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
-          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Try</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -15,6 +15,16 @@ import infiniteScroll from 'vue-infinite-scroll'
 
 import FlagIcon from 'vue-flag-icon'
 
+import VueNativeSock from 'vue-native-websocket'
+
+Vue.use(VueNativeSock, 'ws://127.0.0.1:8000', {
+  reconnection: true, // (Boolean) whether to reconnect automatically (false)
+  reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
+  reconnectionDelay: 3000, // (Number) how long to initially wait before attempting a new (1000)
+  store: store,
+  format: 'json'
+})
+
 Vue.use(FlagIcon)
 Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
@@ -28,6 +38,24 @@ Vue.use(Vuetify, {
 Vue.config.productionTip = false
 Vue.component('main-container', MainContainer)
 Vue.component('main-content', Content)
+Vue.filter('truncate', function (text, length, clamp) {
+  text = text || ''
+  clamp = clamp || '...'
+  length = length || 30
+  if (text.length <= length) return text
+
+  var tcText = text.slice(0, length - clamp.length)
+  var last = tcText.length - 1
+
+  while (last > 0 && tcText[last] !== ' ' && tcText[last] !== clamp[0]) last -= 1
+
+  // Fix for case when text dont have any `space`
+  last = last || length - clamp.length
+
+  tcText = tcText.slice(0, last)
+
+  return tcText + clamp
+})
 
 /* eslint-disable no-new */
 new Vue({

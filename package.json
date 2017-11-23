@@ -18,7 +18,10 @@
     "vue": "^2.5.2",
     "vue-flag-icon": "^1.0.6",
     "vue-infinite-scroll": "^2.0.2",
+    "vue-native-websocket": "^2.0.5",
+    "vue-progressbar": "^0.7.3",
     "vue-router": "^3.0.1",
+    "vue-spinner": "^1.0.3",
     "vuelidate": "^0.6.1",
     "vuetify": "^0.17.1",
     "vuex": "^3.0.1"
