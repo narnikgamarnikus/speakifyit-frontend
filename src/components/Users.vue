@@ -25,10 +25,21 @@
                     <p class="card--custom--body--left--text--title"><strong>{{ user.username }}</strong></p>
                     <p class="card--custom--body--left--text--description">{{ user.about }}</p>
                   </div>
-                  <div class="card--custom--body--left--flag">
-                    <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
-                    <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
-                  </div>                  
+                  <div class="card--custom--body--left--flag" v-for="language in user.learn">
+                    <div style="display: flex; flex-direction: column;align-items: center;">
+                      <flag :iso="language.language" class="flag" />
+                      <v-progress-circular
+                      v-bind:size="45"
+                      v-bind:width="5"
+                      v-bind:value="language.skill * 10"
+                      color="teal"
+                      >
+                      {{ language.skill * 10 }}
+                      </v-progress-circular>
+                      <!--img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag">
+                      <img src="http://www.netherlands-tourism.com/wp-content/uploads/2013/07/Flag-of-The-Netherlands3.png" class="flag"-->
+                    </div> 
+                  </div>                 
                 </div>
               </div>
               </v-card>
@@ -41,9 +52,10 @@
   </v-layout>
 
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="290">
-      <v-card>
-        <v-card-title class="headline">{{ user.username }}</v-card-title>
+    <v-dialog v-model="dialog" max-width="290pxYe ">
+      <v-card class="card--dialog">
+        <img class="card--custom--avatar mt1 image" v-bind:src="user.avatar" alt="user.full_name" width="100%" height="100%">
+        <v-card-title class="headline ">{{ user.username }}</v-card-title>
         <v-card-text>{{ user.about }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -80,6 +92,12 @@ export default {
 }
 </script>
 <style scoped>
+.mt1 {
+  margin-top: 1rem
+}
+.text-center {
+  text-align: center
+}
 .card--custom {
   transition: all .2s ease-in-out;
 }
@@ -126,7 +144,13 @@ export default {
 .flag {
   width: 4rem; 
   height: 3rem;
-  margin: 0 1.5rem 0 1.5rem;
+  margin: 1.5rem 0 1.5rem 0;
+}
+
+.card--dialog {
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
 }
 
 @media screen and (max-width: 500px) {

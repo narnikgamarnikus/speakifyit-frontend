@@ -13,6 +13,9 @@ import Content from './components/Content.vue'
 
 import infiniteScroll from 'vue-infinite-scroll'
 
+import FlagIcon from 'vue-flag-icon'
+
+Vue.use(FlagIcon)
 Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
   theme: {
