@@ -48,18 +48,8 @@
       passwordRules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length) >= 3 || 'Password must be more than 3 characters'
-        // (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid' // eslint-disable-line
+
       ]
-      /*
-      select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
-      ],
-      checkbox: false
-      */
     }),
     watch: {
       loggedIn: function () {

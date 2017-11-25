@@ -11,22 +11,15 @@ import 'vuetify/dist/vuetify.css'
 import MainContainer from './components/Main-container.vue'
 import Content from './components/Content.vue'
 
-import infiniteScroll from 'vue-infinite-scroll'
-
 import FlagIcon from 'vue-flag-icon'
 
-import VueNativeSock from 'vue-native-websocket'
-
-Vue.use(VueNativeSock, 'ws://127.0.0.1:8000', {
+Vue.use(VueNativeSock, 'ws://localhost:9090', { 
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
   reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
   reconnectionDelay: 3000, // (Number) how long to initially wait before attempting a new (1000)
-  store: store,
-  format: 'json'
 })
 
 Vue.use(FlagIcon)
-Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
   theme: {
     primary: '#3f51b5',
@@ -60,8 +53,8 @@ Vue.filter('truncate', function (text, length, clamp) {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
   store,
+  router,
   template: '<App/>',
   components: {App}
 })

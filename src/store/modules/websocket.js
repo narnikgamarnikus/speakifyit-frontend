@@ -6,6 +6,9 @@ const state = {
 
 const getters = {}
 
+const mutations = {}
+
+/*
 const mutations = {
   SOCKET_ONOPEN (state, event) {
     state.isConnected = true
@@ -24,20 +27,25 @@ const mutations = {
     console.info(state, count)
   },
   SOCKET_RECONNECT_ERROR (state) {
-    state.socket.reconnectError = true
+    state.reconnectError = true
   }
   // mutations for reconnect methods
-  /*
   [ws.WS_RECONNECT] (state, count) {
     console.info (state, count)
   },
   [ws.WS_RECONNECT_ERROR] (state) {
     state.socket.reconnectError = true
   }
-  */
 }
+*/
 
-const actions = {}
+const actions = {
+  sendMessage (context, payload) {
+    context.commit('SOCKET_ONMESSAGE', payload)
+    this.$socket.send(JSON.stringify(payload))
+    console.log(state.message)
+  }
+}
 
 export default {
   state,

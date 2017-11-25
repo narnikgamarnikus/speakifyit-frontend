@@ -1,5 +1,5 @@
 <template>
-<div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="2500">
+  <div>
   <v-layout row>
     <v-flex xs12 sm12 md12 lg10 offset-lg1 lx10 offset-lx1 >
       <v-card class="grid">
@@ -14,36 +14,39 @@
           </v-btn>
         </v-toolbar>
         <v-subheader>May</v-subheader>
-        <v-container fluid grid-list-lg>
-          <v-layout row wrap>
-            <v-flex xs12 sm12 md6 lg6 lx6 v-for="(user, i) in $store.state.users.users" :key="i">
-              <v-card style="padding: 1rem" @click.native="dialog = true" ripple class="card--custom">
-              <div class="card--custom--body"  @click="checkUser(user)">
-                <img class="card--custom--avatar image" v-bind:src="user.avatar" alt="user.full_name" width="100%" height="100%">
-                <div class="card--custom--body--left">
-                  <div class="card--custom--body--left--text">
-                    <p class="card--custom--body--left--text--title"><strong>{{ user.username }}</strong></p>
-                    <p class="card--custom--body--left--text--description">{{ user.about | truncate(60) }}</p>
-                  </div>
-                  <div class="card--custom--body--left--flag" v-for="language in user.learn">
-                    <div style="display: flex; flex-direction: column;align-items: center;">
-                      <flag :iso="language.language" class="flag" />
-                      <v-progress-circular
-                      v-bind:size="45"
-                      v-bind:width="5"
-                      v-bind:value="language.skill * 10"
-                      color="teal"
-                      >
-                      {{ language.skill * 10 }}
-                      </v-progress-circular>
+          <v-container fluid grid-list-lg>
+            <v-layout row wrap>
+              <v-flex xs12 sm12 md6 lg6 lx6 v-for="(user, i) in $store.state.users.users" :key="i">
+                <v-card style="padding: 1rem" @click.native="dialog = true" ripple class="card--custom">
+                <div class="card--custom--body"  @click="checkUser(user)">
+                  <img class="card--custom--avatar image" v-bind:src="user.avatar" alt="user.full_name" width="100%" height="100%">
+                  <div class="card--custom--body--left">
+                    <div class="card--custom--body--left--text">
+                      <p class="card--custom--body--left--text--title"><strong>{{ user.username }}</strong></p>
+                      <p class="card--custom--body--left--text--description">{{ user.about | truncate(60) }}</p>
+                    </div>
+                    <div class="card--custom--body--left--flag" v-for="language in user.learn">
+                      <div style="display: flex; flex-direction: column;align-items: center;">
+                        <flag :iso="language.language" class="flag" />
+                        <v-progress-circular
+                        v-bind:size="45"
+                        v-bind:width="5"
+                        v-bind:value="language.skill * 10"
+                        color="teal"
+                        >
+                        {{ language.skill * 10 }}
+                        </v-progress-circular>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        <mugen-scroll :handler="loadMore" :should-handle="!loading" style="display: flex;align-items: center;justify-content: center;">
+          <v-progress-circular indeterminate v-bind:size="50" color="light-blue"></v-progress-circular>
+        </mugen-scroll>
         <v-footer class="mt-5"></v-footer>
       </v-card>
     </v-flex>
@@ -70,14 +73,16 @@
         <v-card-text>{{ user.about }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Try</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="addContact(user)">Add to contact</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
-</div>
+  </div>
 </template>
 <script>
+import MugenScroll from 'vue-mugen-scroll'
+
 export default {
   name: 'Users',
   data () {
@@ -93,12 +98,21 @@ export default {
       setTimeout(() => {
         this.$store.dispatch('getUsersList')
         this.loading = false
-      }, 1000)
+      }, 500)
     },
     checkUser: function (user) {
       this.user = user
+    },
+    addContact: function (user) {
+      this.$store.dispatch('sendMessage', {
+        'command': 'contact',
+        'user': user.id,
+        'token': this.$store.state.auth.token
+      })
+      this.dialog = false
     }
-  }
+  },
+  components: {MugenScroll}
 }
 </script>
 <style scoped>
@@ -129,8 +143,7 @@ export default {
   margin-left: 1rem; 
   display: flex; 
   flex-direction: column; 
-  justify-content: 
-  space-between; 
+  justify-content: space-between; 
   height: 100%;
 }
 .card--custom--body--left--text {

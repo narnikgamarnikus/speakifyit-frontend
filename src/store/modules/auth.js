@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const state = {
-  loggedIn: false,
+  loggedIn: false, // !!localStorage.getItem('speakifyittoken'),
   profile: {},
   validation: {email: true},
   authError: false,
-  token: null
+  token: '' // localStorage.getItem('speakifyittoken') || ''
 }
 
 const getters = {}
@@ -36,6 +36,7 @@ const actions = {
     return axios.post('http://127.0.0.1:8000/api/users/login/', payload)
         .then(response => {
           if (response.status === 200) {
+            localStorage.setItem('speakifyittoken', response.data)
             context.commit('setToken', response.data)
             context.commit('login')
           }
