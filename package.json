@@ -24,6 +24,7 @@
     "vue-progressbar": "^0.7.3",
     "vue-router": "^3.0.1",
     "vue-simple-spinner": "^1.2.8",
+    "vue-socket.io": "^2.1.1-a",
     "vue-spinner": "^1.0.3",
     "vuelidate": "^0.6.1",
     "vuetify": "^0.17.1",

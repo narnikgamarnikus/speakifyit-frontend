@@ -1,23 +1,28 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
+// Main
 import Vue from 'vue'
 import App from './App'
 import {router} from './router'
 import {store} from './store'
+// Main
 
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.css'
-
+// Components
 import MainContainer from './components/Main-container.vue'
 import Content from './components/Content.vue'
+// End components
 
+// Thrid party plugins
 import FlagIcon from 'vue-flag-icon'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.css'
+// End thrid party plugins
 
-Vue.use(VueNativeSock, 'ws://localhost:9090', { 
-  reconnection: true, // (Boolean) whether to reconnect automatically (false)
-  reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
-  reconnectionDelay: 3000, // (Number) how long to initially wait before attempting a new (1000)
-})
+Vue.config.productionTip = false
+
+Vue.component('main-container', MainContainer)
+Vue.component('main-content', Content)
 
 Vue.use(FlagIcon)
 Vue.use(Vuetify, {
@@ -28,9 +33,7 @@ Vue.use(Vuetify, {
     error: '#b71c1c'
   }
 })
-Vue.config.productionTip = false
-Vue.component('main-container', MainContainer)
-Vue.component('main-content', Content)
+
 Vue.filter('truncate', function (text, length, clamp) {
   text = text || ''
   clamp = clamp || '...'
