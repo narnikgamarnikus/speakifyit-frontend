@@ -7,8 +7,24 @@ const state = {
 const getters = {}
 
 const mutations = {
+  socketOnOpen (state, event) {
+    console.log(event)
+    state.isConnected = true
+  },
+  socketOnClose (state) {
+    state.isConnected = false
+  },
+  socketOnError (state, event) {
+    console.error(state, event)
+  },
   socketOnMessage (state, paylaod) {
     state.message = paylaod
+  },
+  socketReconnect (state, count) {
+    console.info(state, count)
+  },
+  socketReconnectError (state) {
+    state.reconnectError = true
   }
 }/*
 const mutations = {
