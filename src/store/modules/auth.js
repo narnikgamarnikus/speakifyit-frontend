@@ -28,6 +28,9 @@ const mutations = {
   },
   setToken (state, token) {
     state.token = token
+  },
+  removeToken (state) {
+    state.token = ''
   }
 }
 
@@ -36,7 +39,6 @@ const actions = {
     return axios.post('http://127.0.0.1:8000/api/users/login/', payload)
         .then(response => {
           if (response.status === 200) {
-            localStorage.setItem('speakifyittoken', response.data)
             context.commit('setToken', response.data)
             context.commit('login')
           }
@@ -48,6 +50,19 @@ const actions = {
             context.commit('setAuthError', false)
           }, 2000)
         })
+  },
+  postLogout (context) {
+    return axios.post('http://127.0.0.1:8000/api/users/logout/?token=' + this.state.auth.token)
+        .then(response => {
+          if (response.status === 200) {
+            context.commit('logout')
+            console.log(response.status)
+            console.log(this.state.auth.loggedIn)
+            console.log(this.state.auth.token)
+            context.commit('removeToken')
+          }
+        })
+        .catch(e => { console.log(e) })
   },
   postRegister (context, payload) {
     return axios.post('http://127.0.0.1:8000/api/users/register/', payload)

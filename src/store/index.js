@@ -19,7 +19,7 @@ export const store = new Vuex.Store({
     websocket
   },
   plugins: [
-    createPersistedState({key: 'vuexx'}),
+    createPersistedState({key: 'speakifyit'}),
     VuexWebsocket({
       path: 'ws://127.0.0.1:8000/token=',
       loginChecker: state => state.auth.loggedIn,

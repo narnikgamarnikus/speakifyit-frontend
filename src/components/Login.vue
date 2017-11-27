@@ -53,6 +53,7 @@
     }),
     watch: {
       loggedIn: function () {
+        console.log('logged in in Login.vue ' + this.loggedIn)
         if (this.loggedIn === true) {
           this.$router.push('/users')
           this.$store.dispatch('getProfile')

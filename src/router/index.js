@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Users from '@/components/Users.vue'
 import Home from '@/components/Home.vue'
 import Login from '@/components/Login.vue'
+import Logout from '@/components/Logout.vue'
 import Chat from '@/components/Chat.vue'
 import NotFoundComponent from '@/components/NotFoundComponent.vue'
 import {store} from '@/store'
@@ -19,7 +20,8 @@ export const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: Login
+      /*
       beforeEnter: (to, from, next) => {
         if (store.state.auth.loggedIn) {
           next({
@@ -29,6 +31,13 @@ export const router = new Router({
           next()
         }
       }
+      */
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout// ,
+      // meta: { requiresAuth: true }
     },
     {
       path: '/users',

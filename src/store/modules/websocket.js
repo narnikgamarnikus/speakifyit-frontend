@@ -10,21 +10,25 @@ const mutations = {
   socketOnOpen (state, event) {
     console.log(event)
     state.isConnected = true
+    console.log(state.isConnected = true)
   },
-  socketOnClose (state) {
+  socketOnClose (state, event) {
     state.isConnected = false
+    console.log(state.isConnected = false)
   },
   socketOnError (state, event) {
     console.error(state, event)
   },
   socketOnMessage (state, paylaod) {
     state.message = paylaod
+    console.log(paylaod)
   },
   socketReconnect (state, count) {
     console.info(state, count)
   },
   socketReconnectError (state) {
     state.reconnectError = true
+    console.log('state.reconnectError = true')
   }
 }/*
 const mutations = {

@@ -51,7 +51,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          <v-list-tile v-else @click="routerPush(item)" v-show="item.show">
+          <v-list-tile v-else @click="routerPush(item.to)" v-show="item.show">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -114,9 +114,18 @@
           <v-icon>more_vert</v-icon>
         </v-btn>
         <v-list>
-          <v-list-tile v-for="item in authItems" :key="item.title" @click="routerPush(item)" v-show="item.show">
+          <!--v-list-tile v-for="item in authItems" :key="item.title" @click="routerPush(item.to)" v-show="item.show">
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile>
+          </v-list-tile-->
+            <v-list-tile v-show="!$store.state.auth.loggedIn" @click="routerPush('/login')">
+              <v-list-tile-title>Login</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-show="!$store.state.auth.loggedIn" @click="routerPush('/login')">
+              <v-list-tile-title>Register</v-list-tile-title>
+            </v-list-tile>            
+            <v-list-tile v-show="$store.state.auth.loggedIn" @click="routerPush('/logout')">
+              <v-list-tile-title>Logout</v-list-tile-title>
+            </v-list-tile>
         </v-list>
       </v-menu>     
     </v-toolbar>
@@ -135,7 +144,6 @@
         { icon: 'content_copy', title: 'Chat', to: '/chat', show: true }
       ],
       authItems: [
-        { icon: 'contacts', title: 'Show', to: '/', show: this.show },
         { icon: 'contacts', title: 'Login', to: '/login', show: !this.show },
         { icon: 'contacts', title: 'Logout', to: '/logout', show: this.show }
       ]
@@ -144,13 +152,19 @@
       source: String
     },
     methods: {
-      routerPush: function (item) {
-        this.$router.push(item.to)
+      routerPush: function (path) {
+        this.$router.push(path)
       }
     },
     computed: {
       show: function () {
+        console.log('SHOW IS: ' + this.show)
         return this.$store.state.auth.loggedIn
+      }
+    },
+    watch: {
+      show: function () {
+        return this.show
       }
     }
   }
