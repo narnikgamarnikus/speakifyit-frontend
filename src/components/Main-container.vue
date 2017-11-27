@@ -158,13 +158,8 @@
     },
     computed: {
       show: function () {
-        console.log('SHOW IS: ' + this.show)
+        console.log(this.show)
         return this.$store.state.auth.loggedIn
-      }
-    },
-    watch: {
-      show: function () {
-        return this.show
       }
     }
   }

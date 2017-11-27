@@ -74,6 +74,7 @@ export default function VuexWebsocket (
 
       socket.onmessage = function (event) {
         console.log('Получены данные ' + event.data)
+        store.commit('socketOnMessage', event.data)
       }
 
       /*

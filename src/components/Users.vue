@@ -106,7 +106,8 @@ export default {
     addContact: function (user) {
       this.$store.dispatch('sendMessage', {
         'command': 'contact',
-        'user': user.id
+        'user': user.id,
+        'token': this.$store.state.auth.token
       })
       this.dialog = false
     }
