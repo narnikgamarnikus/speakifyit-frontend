@@ -125,7 +125,7 @@ export default function VuexWebsocket (
     }
 
     store.subscribe(mutation => {
-      if (mutation.type === 'socketOnMessage') {
+      if (mutation.type === 'socketSend') {
         if (socket.readyState === 1 || socket.readyState === 2) {
           if (typeof mutation.payload === 'string') {
             socket.send(mutation.payload)

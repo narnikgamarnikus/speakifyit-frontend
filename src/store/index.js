@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 // import VuexPersist from 'vuex-persist'
 
 import users from './services/users'
+import chats from './services/chats'
 
 import auth from './modules/auth'
 import websocket from './modules/websocket'
@@ -15,6 +16,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   modules: {
     users,
+    chats,
     auth,
     websocket
   },

@@ -1,7 +1,8 @@
 const state = {
   isConnected: false,
   message: '',
-  reconnectError: false
+  reconnectError: false,
+  sendMessage: ''
 }
 
 const getters = {}
@@ -21,7 +22,6 @@ const mutations = {
   },
   socketOnMessage (state, paylaod) {
     state.message = paylaod
-    console.log(paylaod)
   },
   socketReconnect (state, count) {
     console.info(state, count)
@@ -29,6 +29,9 @@ const mutations = {
   socketReconnectError (state) {
     state.reconnectError = true
     console.log('state.reconnectError = true')
+  },
+  socketSend (state, paylaod) {
+    state.sendMessage = paylaod
   }
 }/*
 const mutations = {
@@ -64,8 +67,7 @@ const mutations = {
 
 const actions = {
   sendMessage (context, payload) {
-    context.commit('socketOnMessage', payload)
-    console.log(state.message)
+    context.commit('socketSend', payload)
   }
 }
 

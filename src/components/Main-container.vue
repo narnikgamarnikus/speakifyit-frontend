@@ -88,22 +88,22 @@
         <v-btn icon slot="activator">
           <v-icon>notifications</v-icon>
         </v-btn>
-        <v-list>
+        <v-list v-for="(notification, i) in $store.state.chats.notifications" :key="i">
           <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="/static/doc-images/john.jpg" alt="John">
+            <v-list-tile-avatar v-for="(user, k) in [notification.from_user]" :key="k">
+              <img :src="user.avatar" alt="John">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>John Leider</v-list-tile-title>
-              <v-list-tile-sub-title>Founder of Vuetify.js</v-list-tile-sub-title>
+              <v-list-tile-title></v-list-tile-title>
+              <v-list-tile-sub-title>{{ notification.content }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-list-tile-action>
+            <v-list-tile-action v-for="(request, z) in [notification.contact_request]" :key="z">
               <v-btn
                 icon
-                :class="fav ? 'red--text' : ''"
-                @click="fav = !fav"
+                :class="request.approved ? 'green--text' : ''"
+                @click="approveContact(request)"
               >
-                <v-icon>favorite</v-icon>
+                <v-icon>done</v-icon>
               </v-btn>
             </v-list-tile-action>
           </v-list-tile>
@@ -142,10 +142,6 @@
         { icon: 'contacts', title: 'Home', to: '/', show: true },
         { icon: 'history', title: 'Users', to: '/users', show: true },
         { icon: 'content_copy', title: 'Chat', to: '/chat', show: true }
-      ],
-      authItems: [
-        { icon: 'contacts', title: 'Login', to: '/login', show: !this.show },
-        { icon: 'contacts', title: 'Logout', to: '/logout', show: this.show }
       ]
     }),
     props: {
@@ -154,13 +150,19 @@
     methods: {
       routerPush: function (path) {
         this.$router.push(path)
+      },
+      approveContact: function (contactRequest) {
+        console.log(contactRequest)
+        this.$store.dispatch('approveContactRequset', contactRequest)
       }
     },
-    computed: {
-      show: function () {
-        console.log(this.show)
-        return this.$store.state.auth.loggedIn
-      }
+    mounted: function () {
+      this.$store.state.chats.notifications = []
+      this.$store.subscribe((mutation, state) => {
+        if (mutation.type === 'socketOnMessage') {
+          this.$store.dispatch('websocketNotificatin', mutation.payload)
+        }
+      })
     }
   }
 </script>
