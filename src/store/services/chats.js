@@ -5,7 +5,11 @@ const state = {
   notifications: []
 }
 
-const getters = {}
+const getters = {
+  unreadNotifications: function (state) {
+    return state.notifications.filter(notification => notification.is_read === false).slice(0, 3)
+  }
+}
 
 const mutations = {
   setMessages (state, message) {
@@ -21,12 +25,12 @@ const mutations = {
 }
 
 const actions = {
-  websocketNotification (content, data) {
+  websocketNotifications (content, data) {
     content.commit('setNotifications', data)
   },
   approveContactRequset (content, contactRequest) {
     contactRequest.accepted = true
-    return axios.put('http://127.0.0.1:8000/api/contact_request/' + contactRequest.id + '/?token=' + this.state.auth.token, contactRequest)
+    return axios.put('http://127.0.0.1:8000/api/contact_requests/' + contactRequest.id + '/?token=' + this.state.auth.token, contactRequest)
         .then(response => { console.log(response) })
         .catch(e => {
           console.log(e)
@@ -34,10 +38,15 @@ const actions = {
         })
   },
   readNotifications (content, notifications) {
+    setTimeout(function () {
+      for (var item in notifications) {
+        var notification = notifications[item]
+        notification.is_read = true
+      }
+    }, 5000)
     for (var item in notifications) {
       var notification = notifications[item]
-      notification.is_read = true
-      return axios.put('http://127.0.0.1:8000/api/notifications/' + notification.id + '/?token=' + this.state.auth.token, notification)
+      axios.post('http://127.0.0.1:8000/api/notifications/is_read/?token=' + this.state.auth.token, { 'id': notification.id })
           .then(response => { console.log(response) })
           .catch(e => {
             console.log(e)

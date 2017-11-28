@@ -88,13 +88,13 @@
         <v-btn icon slot="activator" @click="readNotifications">
           <v-icon>notifications</v-icon>
         </v-btn>
-        <v-list v-for="(notification, i) in $store.state.chats.notifications.slice(0, 3)" :key="i">
+        <v-list v-for="(notification, i) in $store.getters.unreadNotifications" :key="i">
           <v-list-tile avatar>
             <v-list-tile-avatar v-for="(user, k) in [notification.from_user]" :key="k">
               <img :src="user.avatar" :alt="user.username">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title></v-list-tile-title>
+              <v-list-tile-title>{{ notification.id }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ notification.content }}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action v-for="(request, z) in [notification.contact_request]" :key="z">
@@ -155,13 +155,13 @@
         this.$store.dispatch('approveContactRequset', contactRequest)
       },
       readNotifications: function () {
-        this.$store.dispatch('readNotifications', this.$store.state.chats.notifications.slice(0, 3))
+        this.$store.dispatch('readNotifications', this.$store.getters.unreadNotifications)
       }
     },
     mounted: function () {
       this.$store.subscribe((mutation, state) => {
         if (mutation.type === 'socketOnMessage') {
-          this.$store.dispatch('websocketNotificatin', mutation.payload)
+          this.$store.dispatch('websocketNotifications', mutation.payload)
         }
       })
     }
