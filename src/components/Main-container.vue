@@ -85,13 +85,13 @@
         :nudge-width="200"
         v-model="menu"
       >
-        <v-btn icon slot="activator">
+        <v-btn icon slot="activator" @click="readNotifications">
           <v-icon>notifications</v-icon>
         </v-btn>
-        <v-list v-for="(notification, i) in $store.state.chats.notifications" :key="i">
+        <v-list v-for="(notification, i) in $store.state.chats.notifications.slice(0, 3)" :key="i">
           <v-list-tile avatar>
             <v-list-tile-avatar v-for="(user, k) in [notification.from_user]" :key="k">
-              <img :src="user.avatar" alt="John">
+              <img :src="user.avatar" :alt="user.username">
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title></v-list-tile-title>
@@ -100,14 +100,14 @@
             <v-list-tile-action v-for="(request, z) in [notification.contact_request]" :key="z">
               <v-btn
                 icon
-                :class="request.approved ? 'green--text' : ''"
+                :class="request.accepted ? 'green--text' : ''"
                 @click="approveContact(request)"
               >
                 <v-icon>done</v-icon>
               </v-btn>
             </v-list-tile-action>
           </v-list-tile>
-        </v-list>        
+        </v-list>
       </v-menu>
       <v-menu bottom left>
         <v-btn icon slot="activator">
@@ -152,12 +152,13 @@
         this.$router.push(path)
       },
       approveContact: function (contactRequest) {
-        console.log(contactRequest)
         this.$store.dispatch('approveContactRequset', contactRequest)
+      },
+      readNotifications: function () {
+        this.$store.dispatch('readNotifications', this.$store.state.chats.notifications.slice(0, 3))
       }
     },
     mounted: function () {
-      this.$store.state.chats.notifications = []
       this.$store.subscribe((mutation, state) => {
         if (mutation.type === 'socketOnMessage') {
           this.$store.dispatch('websocketNotificatin', mutation.payload)

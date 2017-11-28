@@ -59,5 +59,12 @@ new Vue({
   store,
   router,
   template: '<App/>',
-  components: {App}
+  components: {App},
+  mounted: function () {
+    this.$nextTick(function () {
+      console.log('mounted')
+    // Code that will run only after the
+    // entire view has been rendered
+    })
+  }
 })

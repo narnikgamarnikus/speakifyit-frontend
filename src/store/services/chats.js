@@ -21,17 +21,29 @@ const mutations = {
 }
 
 const actions = {
-  websocketNotificatin (content, data) {
+  websocketNotification (content, data) {
     content.commit('setNotifications', data)
   },
   approveContactRequset (content, contactRequest) {
     contactRequest.accepted = true
     return axios.put('http://127.0.0.1:8000/api/contact_request/' + contactRequest.id + '/?token=' + this.state.auth.token, contactRequest)
-        .then(response => {
-          console.log(response)
-          console.log(response.data)
+        .then(response => { console.log(response) })
+        .catch(e => {
+          console.log(e)
+          contactRequest.accepted = false
         })
-        .catch(e => { console.log(e) })
+  },
+  readNotifications (content, notifications) {
+    for (var item in notifications) {
+      var notification = notifications[item]
+      notification.is_read = true
+      return axios.put('http://127.0.0.1:8000/api/notifications/' + notification.id + '/?token=' + this.state.auth.token, notification)
+          .then(response => { console.log(response) })
+          .catch(e => {
+            console.log(e)
+            notification.is_read = false
+          })
+    }
   }
 }
 
