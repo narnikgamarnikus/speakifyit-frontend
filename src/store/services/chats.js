@@ -8,6 +8,9 @@ const state = {
 const getters = {
   unreadNotifications: function (state) {
     return state.notifications.filter(notification => notification.is_read === false).slice(0, 3)
+  },
+  unreadNotificationsLength: function (state) {
+    return state.notifications.length
   }
 }
 

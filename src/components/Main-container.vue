@@ -86,7 +86,10 @@
         v-model="menu"
       >
         <v-btn icon slot="activator" @click="readNotifications">
-          <v-icon>notifications</v-icon>
+          <v-badge color="red" v-model="$store.getters.unreadNotifications.length" right overlap small>
+            <span slot="badge">{{ $store.getters.unreadNotifications.length }}</span>
+            <v-icon>notifications</v-icon>
+          </v-badge>
         </v-btn>
         <v-list v-for="(notification, i) in $store.getters.unreadNotifications" :key="i">
           <v-list-tile avatar>
