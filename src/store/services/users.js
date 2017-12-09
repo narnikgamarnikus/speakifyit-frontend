@@ -20,6 +20,9 @@ const mutations = {
   setUsersPrevious (state, link) {
     state.usersPrevious = link
   },
+  setFindedUsers (state, users) {
+    state.users = users
+  },
   setUser (state, user) {
     state.user = user
   },
@@ -49,6 +52,15 @@ const actions = {
     return axios.get('/api/users/' + userId)
         .then(response => { context.commit('setUser', response.data) })
         .catch(e => { console.log(e) })
+  },
+  searchUsers (context, query) {
+    return axios.get('http://127.0.0.1:8000/api/users/search/?token=' + this.state.auth.token, { params: {'query': query} })
+    .then(response => {
+      context.commit('setUsersNext', response.data.next)
+      context.commit('setFindedUsers', response.data.results)
+      context.commit('setUsersPrevious', response.data.previous)
+    })
+    .catch(e => { console.log(e) })
   },
   createUser (context, payload) {
     var avatar = payload.avatar

@@ -93,7 +93,7 @@
         </v-btn>
         <v-list v-for="(notification, i) in $store.getters.unreadNotifications" :key="i">
           <v-list-tile avatar>
-            <v-list-tile-avatar v-for="(user, k) in [notification.from_user]" :key="k">
+            <v-list-tile-avatar v-for="(user, k) in [notification.to_user]" :key="k">
               <img :src="user.avatar" :alt="user.username">
             </v-list-tile-avatar>
             <v-list-tile-content>

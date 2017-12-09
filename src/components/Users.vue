@@ -3,14 +3,13 @@
   <v-layout row>
     <v-flex xs12 sm12 md12 lg10 offset-lg1 lx10 offset-lx1 >
       <v-card class="grid">
-        <v-toolbar color="white" flat>
-          <v-btn icon light>
-            <v-icon color="grey darken-2">arrow_back</v-icon>
-          </v-btn>
-          <v-toolbar-title class="grey--text text--darken-4">Albums</v-toolbar-title>
-          <v-spacer></v-spacer>
+        <v-toolbar color="white" flating>
           <v-btn icon light>
             <v-icon color="grey darken-2">search</v-icon>
+          </v-btn>
+          <v-text-field hide-details single-line color="light-blue" v-model="query"></v-text-field>
+          <v-btn icon light>
+            <v-icon color="grey darken-2">more_vert</v-icon>
           </v-btn>
         </v-toolbar>
         <v-subheader>May</v-subheader>
@@ -45,7 +44,7 @@
             </v-layout>
           </v-container>
         <mugen-scroll :handler="loadMore" :should-handle="!loading" style="display: flex;align-items: center;justify-content: center;">
-          <v-progress-circular indeterminate v-bind:size="50" color="light-blue"></v-progress-circular>
+          <v-progress-circular indeterminate v-bind:size="50" color="light-blue" v-show="canLoaded"></v-progress-circular>
         </mugen-scroll>
         <v-footer class="mt-5"></v-footer>
       </v-card>
@@ -89,16 +88,31 @@ export default {
     return {
       dialog: false,
       loading: false,
-      user: {}
+      user: {},
+      query: ''
+    }
+  },
+  computed: {
+    canLoaded: function () {
+      return !!this.$store.state.users.usersNext
+    }
+  },
+  watch: {
+    query: function () {
+      if (this.query.length > 0) {
+        this.$store.dispatch('searchUsers', this.query)
+      }
     }
   },
   methods: {
     loadMore: function () {
       this.loading = true
-      setTimeout(() => {
-        this.$store.dispatch('getUsersList')
-        this.loading = false
-      }, 500)
+      if (this.canLoaded) {
+        setTimeout(() => {
+          this.$store.dispatch('getUsersList')
+          this.loading = false
+        }, 500)
+      }
     },
     checkUser: function (user) {
       this.user = user
